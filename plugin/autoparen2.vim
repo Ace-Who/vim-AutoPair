@@ -1,9 +1,10 @@
+" Auto-close parenthsis {{{
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
-inoremap ) <Esc>:silent call CloseParen(')')<CR>
-inoremap ] <Esc>:silent call CloseParen(']')<CR>
-inoremap } <Esc>:silent call CloseParen('}')<CR>
+inoremap ) <Esc>:call CloseParen(')')<CR>
+inoremap ] <Esc>:call CloseParen(']')<CR>
+inoremap } <Esc>:call CloseParen('}')<CR>
 
 function! CloseParen(mapChar)
 
@@ -16,3 +17,20 @@ function! CloseParen(mapChar)
   endif
 
 endfunction
+" }}}
+
+" New line between braces {{{
+" Must not use <Esc> here. That changes the value of "@.".
+inoremap <CR> <C-o>:call InsertNewlineInBraces(@.)<CR>
+
+function! InsertNewlineInBraces(prevInput)
+
+  let l:prevInsTwoChars = strcharpart(a:prevInput, strlen(a:prevInput) - 2)
+  let l:charsAround = strcharpart(getline('.'), getcurpos()[2] - 2, 2)
+  call feedkeys("\<CR>", 'n')
+  if l:prevInsTwoChars == '{}' && l:charsAround == '{}'
+    call feedkeys(".\<CR>\<C-d>\<Esc>kS", 'n')
+  endif
+
+endfunction
+" }}}
