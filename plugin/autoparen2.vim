@@ -2,11 +2,11 @@
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
-inoremap ) <Esc>:call CloseParen(')')<CR>
-inoremap ] <Esc>:call CloseParen(']')<CR>
-inoremap } <Esc>:call CloseParen('}')<CR>
+inoremap ) <Esc>:call autoparen#close(')')<CR>
+inoremap ] <Esc>:call autoparen#close(']')<CR>
+inoremap } <Esc>:call autoparen#close('}')<CR>
 
-function! CloseParen(mapChar)
+function! autoparen#close(mapChar)
 
   let l:nextChar = strcharpart(getline('.'), getcurpos()[2], 1)
   echo l:nextChar
@@ -21,9 +21,9 @@ endfunction
 
 " New line between braces {{{
 " Must not use <Esc> here. That changes the value of "@.".
-inoremap <CR> <C-o>:call InsertNewlineInBraces(@.)<CR>
+inoremap <CR> <C-o>:call aotoparen#insNewlineInBraces(@.)<CR>
 
-function! InsertNewlineInBraces(prevInput)
+function! aotoparen#insNewlineInBraces(prevInput)
 
   let l:prevInsTwoChars = strcharpart(a:prevInput, strlen(a:prevInput) - 2)
   let l:charsAround = strcharpart(getline('.'), getcurpos()[2] - 2, 2)
