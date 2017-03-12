@@ -21,9 +21,9 @@ endfunction
 
 " New line between braces {{{
 " Must not use <Esc> here. That changes the value of "@.".
-inoremap <CR> <C-o>:call aotoparen#insNewlineInBraces(@.)<CR>
+inoremap <CR> <C-o>:call autoparen#insNewlineInBraces(@.)<CR>
 
-function! aotoparen#insNewlineInBraces(prevInput)
+function! autoparen#insNewlineInBraces(prevInput)
 
   let l:prevInsTwoChars = strcharpart(a:prevInput, strlen(a:prevInput) - 2)
   let l:charsAround = strcharpart(getline('.'), getcurpos()[2] - 2, 2)
