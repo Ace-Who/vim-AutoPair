@@ -2,11 +2,11 @@
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
-inoremap ) <Esc>:call autoparen#close(')')<CR>
-inoremap ] <Esc>:call autoparen#close(']')<CR>
-inoremap } <Esc>:call autoparen#close('}')<CR>
+inoremap ) <Esc>:call autoparen#Close(')')<CR>
+inoremap ] <Esc>:call autoparen#Close(']')<CR>
+inoremap } <Esc>:call autoparen#Close('}')<CR>
 
-function! autoparen#close(mapChar)
+function! autoparen#Close(mapChar)
 
   let l:nextChar = strcharpart(getline('.'), getcurpos()[2], 1)
   echo l:nextChar
@@ -21,15 +21,17 @@ endfunction
 
 " New line between braces {{{
 " Must not use <Esc> here. That changes the value of "@.".
-inoremap <CR> <C-o>:call autoparen#insNewlineInBraces(@.)<CR>
+inoremap <CR> <C-o>:call autoparen#InsertNewlineInBraces(@.)<CR>
 
-function! autoparen#insNewlineInBraces(prevInput)
+function! autoparen#InsertNewlineInBraces(prevInput)
 
   let l:prevInsTwoChars = strcharpart(a:prevInput, strlen(a:prevInput) - 2)
   let l:charsAround = strcharpart(getline('.'), getcurpos()[2] - 2, 2)
   call feedkeys("\<CR>", 'n')
   if l:prevInsTwoChars == '{}' && l:charsAround == '{}'
-    call feedkeys(".\<CR>\<C-d>\<Esc>kS", 'n')
+    " Both below work. Notice the 'S' command makes proper indent automatically.
+    call feedkeys("\<CR>\<Esc>kS", 'n')
+    "call feedkeys("\<Esc>kA\<CR>", 'n')
   endif
 
 endfunction
