@@ -23,13 +23,13 @@ function! autoparen#InsertNewlineInBraces(prevInput)
 
   let l:prevInsTwoChars = strpart(a:prevInput, strlen(a:prevInput) - 2)
   let l:charsAround = strpart(getline('.'), col('.') - 2, 2)
-  call feedkeys("\<CR>", 'n')
-  if l:prevInsTwoChars == '{}' && l:charsAround == '{}'
-    " All belows work. Notice the 'S' command makes proper indent automatically.
-    call feedkeys("\<C-o>O", 'n')
-    " call feedkeys("\<CR>\<Esc>kS", 'n')
-    " call feedkeys("\<Esc>kA\<CR>", 'n')
-  endif
+  let l:keySeq = "\<CR>"
+  let l:keySeq .= (l:prevInsTwoChars == '{}' && l:charsAround == '{}')
+  \ ? "\<C-o>O" : ''
+  " Belows also work. Notice the 'S' command makes proper indent automatically.
+  "\<CR>\<Esc>kS"
+  "\<Esc>kA\<CR>"
+  call feedkeys(l:keySeq, 'n')
 
 endfunction
 " }}}
