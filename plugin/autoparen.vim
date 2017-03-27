@@ -9,7 +9,6 @@ inoremap } <C-\><C-o>:call autoparen#Close('}')<CR>
 function! autoparen#Close(mapChar)
 
   let l:nextChar = strpart(getline('.'), col('.') - 1, 1)
-  echo l:nextChar
   if l:nextChar ==# a:mapChar
     call feedkeys("\<Right>", 'n')
   else
@@ -25,8 +24,8 @@ inoremap <CR> <C-o>:call autoparen#InsertNewlineInBraces(@.)<CR>
 
 function! autoparen#InsertNewlineInBraces(prevInput)
 
-  let l:prevInsTwoChars = strcharpart(a:prevInput, strlen(a:prevInput) - 2)
-  let l:charsAround = strcharpart(getline('.'), getcurpos()[2] - 2, 2)
+  let l:prevInsTwoChars = strpart(a:prevInput, strlen(a:prevInput) - 2)
+  let l:charsAround = strpart(getline('.'), col('.') - 2, 2)
   call feedkeys("\<CR>", 'n')
   if l:prevInsTwoChars == '{}' && l:charsAround == '{}'
     " Both below work. Notice the 'S' command makes proper indent automatically.
