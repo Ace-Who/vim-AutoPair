@@ -2,18 +2,18 @@
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
-inoremap ) <Esc>:call autoparen#Close(')')<CR>
-inoremap ] <Esc>:call autoparen#Close(']')<CR>
-inoremap } <Esc>:call autoparen#Close('}')<CR>
+inoremap ) <C-\><C-o>:call autoparen#Close(')')<CR>
+inoremap ] <C-\><C-o>:call autoparen#Close(']')<CR>
+inoremap } <C-\><C-o>:call autoparen#Close('}')<CR>
 
 function! autoparen#Close(mapChar)
 
-  let l:nextChar = strcharpart(getline('.'), getcurpos()[2], 1)
+  let l:nextChar = strpart(getline('.'), col('.') - 1, 1)
   echo l:nextChar
   if l:nextChar ==# a:mapChar
-    call feedkeys("la", 'n')
+    call feedkeys("\<Right>", 'n')
   else
-    call feedkeys('a' . a:mapChar, 'n')
+    call feedkeys(a:mapChar, 'n')
   endif
 
 endfunction
