@@ -1,12 +1,12 @@
-" Auto-close parenthsis {{{
+" Auto-close parenthsis, brackets and braces {{{
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
-inoremap ) <C-\><C-o>:call autoparen#Close(')')<CR>
-inoremap ] <C-\><C-o>:call autoparen#Close(']')<CR>
-inoremap } <C-\><C-o>:call autoparen#Close('}')<CR>
+inoremap ) <C-\><C-o>:call autoclose#Close(')')<CR>
+inoremap ] <C-\><C-o>:call autoclose#Close(']')<CR>
+inoremap } <C-\><C-o>:call autoclose#Close('}')<CR>
 
-function! autoparen#Close(mapChar)
+function! autoclose#Close(mapChar)
 
   let l:nextChar = strpart(getline('.'), col('.') - 1, 1)
   let l:feedkey = (l:nextChar ==# a:mapChar) ? "\<Right>" : a:mapChar
@@ -17,9 +17,9 @@ endfunction
 
 " New line between braces {{{
 " Must not use <Esc> here. That changes the value of "@.".
-inoremap <CR> <C-o>:call autoparen#InsertBlankLine(@.)<CR>
+inoremap <CR> <C-o>:call autoclose#InsertBlankLine(@.)<CR>
 
-function! autoparen#InsertBlankLine(prevInput)
+function! autoclose#InsertBlankLine(prevInput)
 
   let l:prevInsTwoChars = strpart(a:prevInput, strlen(a:prevInput) - 2)
   let l:charsAround = strpart(getline('.'), col('.') - 2, 2)
@@ -27,7 +27,7 @@ function! autoparen#InsertBlankLine(prevInput)
   let l:keySeq .=
   \ (l:prevInsTwoChars == '{}' && l:charsAround == '{}') ||
   \ (l:prevInsTwoChars == '[]' && l:charsAround == '[]')
-  \ ? "\<C-o>O" : ''
+  \ ? "\<Esc>O" : ''
   " Belows also work. Notice the 'S' command makes proper indent automatically.
   "\<CR>\<Esc>kS"
   "\<Esc>kA\<CR>"
