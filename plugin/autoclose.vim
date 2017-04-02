@@ -17,21 +17,20 @@ endfunction
 
 " New line between braces {{{
 " Must not use <Esc> here. That changes the value of "@.".
-inoremap <CR> <C-o>:call autoclose#InsertBlankLine(@.)<CR>
+inoremap <CR> <C-o>:call autoclose#InsertBlankLine(@.)<CR><CR>
 
 function! autoclose#InsertBlankLine(prevInput)
 
   let l:prevInsTwoChars = strpart(a:prevInput, strlen(a:prevInput) - 2)
   let l:charsAround = strpart(getline('.'), col('.') - 2, 2)
-  let l:keySeq = "\<CR>"
-  let l:keySeq .=
-  \ (l:prevInsTwoChars == '{}' && l:charsAround == '{}') ||
-  \ (l:prevInsTwoChars == '[]' && l:charsAround == '[]')
-  \ ? "\<Esc>O" : ''
-  " Belows also work. Notice the 'S' command makes proper indent automatically.
-  "\<CR>\<Esc>kS"
-  "\<Esc>kA\<CR>"
-  call feedkeys(l:keySeq, 'n')
+  if (l:prevInsTwoChars == '{}' && l:charsAround == '{}') ||
+   \ (l:prevInsTwoChars == '[]' && l:charsAround == '[]')
+    call feedkeys("\<Esc>O", 'n')
+    " Belows also work. Notice the 'S' command makes proper indent
+    " automatically.
+    " "\<CR>\<Esc>kS"
+    " "\<Esc>kA\<CR>"
+  endif
 
 endfunction
 " }}}
