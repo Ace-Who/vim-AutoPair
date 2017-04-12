@@ -10,17 +10,17 @@ set cpoptions&vim
 inoremap ( ()<C-G>U<Left>
 inoremap [ []<C-G>U<Left>
 inoremap { {}<C-G>U<Left>
-inoremap <silent> ) <C-\><C-O>:call autoclose#Close(')')<CR>
-inoremap <silent> ] <C-\><C-O>:call autoclose#Close(']')<CR>
-inoremap <silent> } <C-\><C-O>:call autoclose#Close('}')<CR>
+inoremap <silent> ) <C-\><C-O>:call AutoPair#Close(')')<CR>
+inoremap <silent> ] <C-\><C-O>:call AutoPair#Close(']')<CR>
+inoremap <silent> } <C-\><C-O>:call AutoPair#Close('}')<CR>
 "}}}
 
 " New line between brace pair {{{
 " Must not use <Esc> here, since it changes the value of "@.".
-inoremap <silent> <CR> <C-O>:call autoclose#InsertBlankLine(@.)<CR><CR>
+inoremap <silent> <CR> <C-O>:call AutoPair#InsertBlankLine(@.)<CR><CR>
 "}}}
 
-function! autoclose#Close(mapChar) "{{{
+function! AutoPair#Close(mapChar) "{{{
 
   let l:nextChar = strpart(getline('.'), col('.') - 1, 1)
   let l:feedkey = (l:nextChar ==# a:mapChar) ? "\<Right>" : a:mapChar
@@ -28,7 +28,7 @@ function! autoclose#Close(mapChar) "{{{
 
 endfunction "}}}
 
-function! autoclose#InsertBlankLine(prevInput) "{{{
+function! AutoPair#InsertBlankLine(prevInput) "{{{
 
   let l:charsAround = strpart(getline('.'), col('.') - 2, 2)
   if !(l:charsAround == '{}' || l:charsAround == '[]')

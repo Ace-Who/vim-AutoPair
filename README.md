@@ -1,4 +1,4 @@
-# vim-AutoClose
+# vim-AutoPair
 
 Appends `)`, `]`, `}` behind the cursor automatically when user types the open
 counterpart. If user types it manually while the same delimiter is right
