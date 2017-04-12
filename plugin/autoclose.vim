@@ -1,10 +1,23 @@
+" Change the 'cpoptions' option temporarily {{{
+" Set to its Vim default value and restore it later.
+" This is to enable line-continuation within this script.
+" Refer to :help use-cpo-save.
+let s:save_cpoptions = &cpoptions
+set cpoptions&vim
+" }}}
+
 " Auto-close parenthsis, brackets and braces {{{
 inoremap ( ()<C-G>U<Left>
 inoremap [ []<C-G>U<Left>
 inoremap { {}<C-G>U<Left>
-inoremap ) <C-\><C-O>:call autoclose#Close(')')<CR>
-inoremap ] <C-\><C-O>:call autoclose#Close(']')<CR>
-inoremap } <C-\><C-O>:call autoclose#Close('}')<CR>
+inoremap <silent> ) <C-\><C-O>:call autoclose#Close(')')<CR>
+inoremap <silent> ] <C-\><C-O>:call autoclose#Close(']')<CR>
+inoremap <silent> } <C-\><C-O>:call autoclose#Close('}')<CR>
+"}}}
+
+" New line between brace pair {{{
+" Must not use <Esc> here, since it changes the value of "@.".
+inoremap <silent> <CR> <C-O>:call autoclose#InsertBlankLine(@.)<CR><CR>
 "}}}
 
 function! autoclose#Close(mapChar) "{{{
@@ -15,24 +28,34 @@ function! autoclose#Close(mapChar) "{{{
 
 endfunction "}}}
 
-" New line between braces 
-" Must not use <Esc> here, since it changes the value of "@.".
-inoremap <CR> <C-O>:call autoclose#InsertBlankLine(@.)<CR><CR>
-
 function! autoclose#InsertBlankLine(prevInput) "{{{
 
-  let l:prevIns2Chars = strpart(a:prevInput, strlen(a:prevInput) - 2)
-  let l:prevIns7Chars = strpart(a:prevInput, strlen(a:prevInput) - 7)
   let l:charsAround = strpart(getline('.'), col('.') - 2, 2)
-  if (l:prevIns2Chars == '{}' && l:charsAround == '{}') ||
-   \ (l:prevIns2Chars == '[]' && l:charsAround == '[]') ||
-   \ (l:prevIns7Chars == "{}\<C-G>U\<Left>" && l:charsAround == '{}') ||
-   \ (l:prevIns7Chars == "[]\<C-G>U\<Left>" && l:charsAround == '[]')
+  if !(l:charsAround == '{}' || l:charsAround == '[]')
+    return
+  endif
+
+  let l:prevIns2Chars = strpart(a:prevInput, strlen(a:prevInput) - 2)
+  if (l:prevIns2Chars == '{}') || (l:prevIns2Chars == '[]')
+    let l:doit = 1
+  else
+    let l:prevIns7Chars = strpart(a:prevInput, strlen(a:prevInput) - 7)
+    if (l:prevIns7Chars == "{}\<C-G>U\<Left>") ||
+    \  (l:prevIns7Chars == "[]\<C-G>U\<Left>")
+      let l:doit = 1
+    endif
+  endif
+
+  if exists('l:doit')
     call feedkeys("\<Esc>O", 'n')
-    " Belows also work. Notice the 'S' command makes proper indent
-    " automatically.
+    " Belows also work. Notice the 'S' command indents the line
     " "\<CR>\<Esc>kS"
     " "\<Esc>kA\<CR>"
   endif
 
 endfunction "}}}
+
+" Restore 'cpoptions' setting {{{
+let &cpoptions = s:save_cpoptions
+unlet s:save_cpoptions
+" }}}
