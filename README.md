@@ -1,6 +1,9 @@
 # vim-AutoClose
 
-Automatic `)`, `]`, `}` typing when their open counterpart is typed by user.
-When user is typing them manually which is the same as the character right to the text caret, the typing is replaced with moving to the right one character.
+Appends `)`, `]`, `}` behind the cursor automatically when user types the open
+counterpart. If user types it manually while the same delimiter is right
+behind, it acts like pressing the `<Right>` key, thus only moves the cursor
+behind the it.
 
-Another thing it does happens when a newline is typed by user right after a pair of `[]` or `{}` are typed between them. What it does is inserting a blank line between the delimiter mates.
+Besides, typing `[<CR>` or `{<CR>`, with `]` or `}` automatically appended,
+inserts an aditional blank line.
