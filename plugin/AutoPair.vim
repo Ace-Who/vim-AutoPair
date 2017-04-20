@@ -17,7 +17,7 @@ inoremap <silent> } <C-\><C-O>:call AutoPair#Close('}')<CR>
 
 " New line between brace pair {{{
 " Must not use <Esc> here, since it changes the value of "@.".
-inoremap <silent> <CR> <C-O>:call AutoPair#InsertBlankLine(@.)<CR><CR>
+inoremap <silent> <CR> <C-\><C-O>:call AutoPair#InsertBlankLine(@.)<CR><CR>
 "}}}
 
 function! AutoPair#Close(mapChar) "{{{
@@ -48,9 +48,6 @@ function! AutoPair#InsertBlankLine(prevInput) "{{{
 
   if exists('l:doit')
     call feedkeys("\<Esc>O", 'n')
-    " Belows also work. Notice the 'S' command indents the line
-    " "\<CR>\<Esc>kS"
-    " "\<Esc>kA\<CR>"
   endif
 
 endfunction "}}}
