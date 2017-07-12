@@ -13,12 +13,22 @@ inoremap { {}<C-G>U<Left>
 inoremap <silent> ) <C-\><C-O>:call AutoPair#Close(')')<CR>
 inoremap <silent> ] <C-\><C-O>:call AutoPair#Close(']')<CR>
 inoremap <silent> } <C-\><C-O>:call AutoPair#Close('}')<CR>
+inoremap <silent> " <C-\><C-O>:call AutoPair#Quote('"')<CR>
+inoremap <silent> ' <C-\><C-O>:call AutoPair#Quote("'")<CR>
+inoremap <silent> ` <C-\><C-O>:call AutoPair#Quote('`')<CR>
 "}}}
 
 " New line between brace pair {{{
 " Must not use <Esc> here, since it changes the value of "@.".
 inoremap <silent> <CR> <C-\><C-O>:call AutoPair#InsertBlankLine(@.)<CR><CR>
 "}}}
+
+fun! AutoPair#Quote(mapChar)
+  let l:nextChar = strpart(getline('.'), col('.') - 1, 1)
+  let l:prevChar = strpart(getline('.'), col('.') - 2, 1)
+  let l:feedkeys = (l:nextChar ==# a:mapChar || l:prevChar ==# a:mapChar) ? a:mapChar : a:mapChar . a:mapChar . "\<left>"
+  call feedkeys(l:feedkeys, 'n')
+endf
 
 function! AutoPair#Close(mapChar) "{{{
 
